@@ -7,6 +7,7 @@ const line = require('@line/bot-sdk');
 var arr = [ "魔材ンゴwwww", "やめたらこの仕事？", "歪みねえな", "24歳です" ];
 
 const liff = functions.config().liff.url;
+const map = functions.config().liff.map;
 
 const config = {
     channelSecret: functions.config().channel.secret,
@@ -16,8 +17,6 @@ const config = {
 const app = express();
 
 app.post('/webhook', line.middleware(config), (req, res) => {
-    console.log(config);
-    console.log(req.body.events);
     Promise
       .all(req.body.events.map(handleEvent))
       .then((result) => res.json(result));
@@ -39,8 +38,13 @@ async function handleEvent(event) {
       type: 'text',
       text:  arr[ Math.floor( Math.random() * arr.length ) ]
     }
-    if (event.message.text === 'liff') {
-      reply.text = liff;
+    switch (event.message.text) {
+      case 'liff':
+        reply.text = liff;
+        break;
+      case 'map':
+        reply.text = map;
+        break;
     }
     return client.replyMessage(event.replyToken, reply);
   }
