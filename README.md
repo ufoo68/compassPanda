@@ -3,5 +3,5 @@
 
 ## デプロイのコマンド
 ```
-sudo firebase deploy --only functions,hosting
+sudo firebase deploy --only functions
 ```

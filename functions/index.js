@@ -3,6 +3,11 @@
 const functions = require('firebase-functions');
 const express = require('express');
 const line = require('@line/bot-sdk');
+const admin = require('firebase-admin');
+
+admin.initializeApp(functions.config().firebase);
+
+var db = admin.firestore();
 
 var arr = [ "魔材ンゴwwww", "やめたらこの仕事？", "歪みねえな", "24歳です" ];
 
@@ -25,32 +30,34 @@ app.post('/webhook', line.middleware(config), (req, res) => {
 const client = new line.Client(config);
 
 async function handleEvent(event) {
-  if (event.message.type === 'location') {
-    return client.replyMessage(event.replyToken, {
-      type: 'sticker',
-      packageId: 11538,
-      stickerId: 51626496
-    });
-  }
-
-  if (event.message.type === 'text') {
-    let reply = {
-      type: 'text',
-      text:  arr[ Math.floor( Math.random() * arr.length ) ]
-    }
-    switch (event.message.text) {
-      case 'liff':
-        reply.text = liff;
-        break;
-      case 'map':
-        reply.text = map;
-        break;
-    }
-    return client.replyMessage(event.replyToken, reply);
-  }
-
-  if (event.type !== 'message' || event.message.type !== 'text') {
-    return Promise.resolve(null);
+  switch (event.message.type) {
+    case 'location':
+      let replySticker = {
+        type: 'sticker',
+        packageId: 11538,
+        stickerId: 51626496
+      };
+      const locateData = {
+        latitude: event.message.latitude,
+        longitude:  event.message.longitude
+      };
+      db.collection('locateTweet').doc(event.source.userId).set(locateData);
+      return client.replyMessage(event.replyToken, replySticker);
+    
+    case 'text':
+      let replyText = {
+        type: 'text',
+        text:  arr[ Math.floor( Math.random() * arr.length ) ]
+      }
+      const tweetData = {
+        tweet:  event.message.text
+      };
+      db.collection('locateTweet').doc(event.source.userId).set(tweetData);
+      if (event.message.text == 'liff') { reply.text = liff; }
+      return client.replyMessage(event.replyToken, replyText);
+      
+    default:
+      return Promise.resolve(null);
   }
 
 }
