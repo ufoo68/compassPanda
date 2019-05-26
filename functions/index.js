@@ -9,7 +9,7 @@ admin.initializeApp(functions.config().firebase);
 
 var db = admin.firestore();
 
-var arr = [ "魔材ンゴwwww", "やめたらこの仕事？", "歪みねえな", "24歳です" ];
+const arr = [ '僕はコンパスパンダだよ', '好きな場所で呟いてね', 'みんなの呟きも見れるよ', '呟くときは「:」を使わないでね。' ];
 
 const liff = functions.config().liff.url;
 const map = functions.config().liff.map;
@@ -30,29 +30,30 @@ app.post('/webhook', line.middleware(config), (req, res) => {
 const client = new line.Client(config);
 
 async function handleEvent(event) {
+  let replyText = {
+    type: 'text',
+    text: ''
+  };
   switch (event.message.type) {
     case 'location':
-      let replySticker = {
-        type: 'sticker',
-        packageId: 11538,
-        stickerId: 51626496
-      };
       const locateData = {
         latitude: event.message.latitude,
         longitude:  event.message.longitude
       };
-      db.collection('locateTweet').doc(event.source.userId).set(locateData);
-      return client.replyMessage(event.replyToken, replySticker);
+      replyText.text = `${event.timestamp}:`;
+      db.collection('locateTweet').doc(`${event.timestamp}`).set(locateData);
+      return client.replyMessage(event.replyToken, replyText);
     
     case 'text':
-      let replyText = {
-        type: 'text',
-        text:  arr[ Math.floor( Math.random() * arr.length ) ]
+      replyText.text = arr[ Math.floor( Math.random() * arr.length )];
+      const tweet = event.message.text.split(':');
+      if (tweet.length === 2) {
+        const tweetData = {
+          tweet: tweet[1]
+        };
+        db.collection('locateTweet').doc(tweet[0]).set(tweetData, { merge: true });
+        replyText.text = `タイムスタンプ「${tweet[0]}」で呟いたよ`;
       }
-      const tweetData = {
-        tweet:  event.message.text
-      };
-      db.collection('locateTweet').doc(event.source.userId).set(tweetData);
       if (event.message.text == 'liff') { reply.text = liff; }
       return client.replyMessage(event.replyToken, replyText);
       

@@ -64,6 +64,4 @@ node_modules/
 # dotenv environment variables file
 .env
 
-animalface_panda.jpg
-war_bakuha_switch_off.jpg
-memo
+ignore
