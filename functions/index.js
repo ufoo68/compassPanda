@@ -11,7 +11,7 @@ var db = admin.firestore();
 
 const arr = [ '僕はコンパスパンダだよ', '好きな場所で呟いてね', 'みんなの呟きも見れるよ', '呟くときは「:」を使わないでね。' ];
 
-const liff = functions.config().liff.url;
+const form = functions.config().liff.form;
 const map = functions.config().liff.map;
 
 const config = {
@@ -54,7 +54,7 @@ async function handleEvent(event) {
         db.collection('locateTweet').doc(tweet[0]).set(tweetData, { merge: true });
         replyText.text = `タイムスタンプ「${tweet[0]}」で呟いたよ`;
       }
-      if (event.message.text == 'liff') { reply.text = liff; }
+      if (event.message.text == 'liff') { replyText.text = form; }
       return client.replyMessage(event.replyToken, replyText);
       
     default:
