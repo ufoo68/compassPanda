@@ -42,7 +42,7 @@ async function handleEvent(event) {
       };
       replyText.text = `${event.timestamp}:`;
       db.collection('locateTweet').doc(`${event.timestamp}`).set(locateData);
-      return client.replyMessage(event.replyToken, replyText);
+      return client.replyMessage(event.replyToken, [replyText, {type: "text", text: '↑のメッセージを使って呟いてね'}]);
     
     case 'text':
       replyText.text = arr[ Math.floor( Math.random() * arr.length )];
