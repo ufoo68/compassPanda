@@ -40,9 +40,9 @@ async function handleEvent(event) {
         latitude: event.message.latitude,
         longitude:  event.message.longitude
       };
-      replyText.text = `${event.timestamp}:`;
+      replyText.text = `${event.timestamp}`;
       db.collection('locateTweet').doc(`${event.timestamp}`).set(locateData);
-      return client.replyMessage(event.replyToken, [replyText, {type: "text", text: '↑のメッセージを使って呟いてね'}]);
+      return client.replyMessage(event.replyToken, [replyText, {type: "text", text: `↑のメッセージを使って${form} で呟いてね`}]);
     
     case 'text':
       replyText.text = arr[ Math.floor( Math.random() * arr.length )];
@@ -54,7 +54,7 @@ async function handleEvent(event) {
         db.collection('locateTweet').doc(tweet[0]).set(tweetData, { merge: true });
         replyText.text = `タイムスタンプ「${tweet[0]}」で呟いたよ`;
       }
-      if (event.message.text == 'liff') { replyText.text = form; }
+      if (event.message.text == 'map') { replyText.text = map; }
       return client.replyMessage(event.replyToken, replyText);
       
     default:
