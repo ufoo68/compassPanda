@@ -1,7 +1,9 @@
-# compassPanda
-コンパスパンダのレポジトリ
+# はじめに
+このレポジトリはLINE bot「コンパスパンダ」のソースコードが保管されています。
+
+# コンパスパンダについて
 
 ## デプロイのコマンド
 ```
-sudo firebase deploy --only functions
+firebase deploy --only functions
 ```

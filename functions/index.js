@@ -9,7 +9,7 @@ admin.initializeApp(functions.config().firebase);
 
 var db = admin.firestore();
 
-const arr = [ '僕はコンパスパンダだよ', '好きな場所で呟いてね', 'みんなの呟きも見れるよ', '呟くときは「:」を使わないでね。' ];
+const arr = [ 'んー、お姉さん難しいことわかんないなー', '君は面白いことを言うね', 'いいんだよ？たまには褒めてくれても'];
 
 const form = functions.config().liff.form;
 const map = functions.config().liff.map;
@@ -30,32 +30,63 @@ app.post('/webhook', line.middleware(config), (req, res) => {
 const client = new line.Client(config);
 
 async function handleEvent(event) {
-  let replyText = {
+  let replyText1 = {
     type: 'text',
     text: ''
   };
+  let replyText2 = {
+    type: 'text',
+    text: ''
+  };
+  let replyText3 = {
+    type: 'text',
+    text: ''
+  };
+
+  // switch of follow
+  switch (event.type) {
+    case 'follow':
+        replyText1.text = `友達登録ありがとう。`;
+        replyText2.text = `私は今あなたがいる場所に呟きを残すことができるよ。`;
+        replyText3.text = `むふふ、すごいでしょ～。`;
+        return client.replyMessage(event.replyToken, [replyText1, replyText2, replyText3]);
+  }
+
+  // switch of messages
   switch (event.message.type) {
     case 'location':
       const locateData = {
         latitude: event.message.latitude,
         longitude:  event.message.longitude
       };
-      replyText.text = `${event.timestamp}`;
+      replyText1.text = 'その場所ならこれかな？'
+      replyText2.text = `${event.timestamp}`;
+      replyText3.text = `上の番号といっしょに ${form} で呟いてみて`
       db.collection('locateTweet').doc(`${event.timestamp}`).set(locateData);
-      return client.replyMessage(event.replyToken, [replyText, {type: "text", text: `↑のメッセージを使って${form} で呟いてね`}]);
+      return client.replyMessage(event.replyToken, [replyText1, replyText2, replyText3]);
     
     case 'text':
-      replyText.text = arr[ Math.floor( Math.random() * arr.length )];
+      replyText1.text = arr[ Math.floor( Math.random() * arr.length )];
       const tweet = event.message.text.split(':');
       if (tweet.length === 2) {
         const tweetData = {
           tweet: tweet[1]
         };
         db.collection('locateTweet').doc(tweet[0]).set(tweetData, { merge: true });
-        replyText.text = `タイムスタンプ「${tweet[0]}」で呟いたよ`;
+        replyText1.text = `タイムスタンプ「${tweet[0]}」で呟いたよ`;
       }
-      if (event.message.text == 'map') { replyText.text = map; }
-      return client.replyMessage(event.replyToken, replyText);
+      switch (event.message.text) {
+        case 'map':
+          replyText1.text = `地図が見たいの？はいどうぞ`;
+          replyText2.text = map;
+          return client.replyMessage(event.replyToken, [replyText1, replyText2]);
+        case '使い方':
+          replyText1.text = `どうすればいいか説明するよ。`;
+          replyText2.text = `まず「map」って言ってくれたら地図を出してあげるから、それで呟きを残したい場所を選んで。`;
+          replyText3.text = `そしたらお姉さんが秘密のコードを教えてあげるから、呟きたいことを教えてね。`;
+          return client.replyMessage(event.replyToken, [replyText1, replyText2, replyText3]);
+      }
+      return client.replyMessage(event.replyToken, replyText1);
       
     default:
       return Promise.resolve(null);
