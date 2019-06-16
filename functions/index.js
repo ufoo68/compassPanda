@@ -87,8 +87,8 @@ async function handleEvent(event) {
           return client.replyMessage(event.replyToken, [replyText1, replyText2]);
         case '使い方':
           replyText1.text = `どうすればいいか説明するよ。`;
-          replyText2.text = `まず「map」って言ってくれたら地図を出してあげるから、それで呟きを残したい場所を選んで。`;
-          replyText3.text = `そしたらお姉さんが秘密のコードを教えてあげるから、呟きたいことを教えてね。`;
+          replyText2.text = `呟きたいときは「位置情報」を教えてね。そしたらお姉さんが秘密のコードを教えてあげるから、呟きたいことを教えてね。`;
+          replyText3.text = `地図が見たいときは下のメニューから「地図を見る」を選ぶか、「地図」と言ってくれたらわたしが地図を開くよ。`;
           return client.replyMessage(event.replyToken, [replyText1, replyText2, replyText3]);
       }
       return client.replyMessage(event.replyToken, replyText1);
