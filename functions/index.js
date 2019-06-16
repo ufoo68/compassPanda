@@ -9,7 +9,10 @@ admin.initializeApp(functions.config().firebase);
 
 var db = admin.firestore();
 
-const arr = [ 'んー、お姉さん難しいことわかんないなー', '君は面白いことを言うね', 'いいんだよ？たまには褒めてくれても'];
+const phraseDef = [ 'んー、お姉さん難しいことわかんないなー', '君は面白いことを言うね', 'いいんだよ？たまには褒めてくれても',
+              'いやー、君も飽きないね', 'どうやら楽しんでくれてるようで、お姉さんも嬉しいな', '安心してくれたまえよ君、明日は晴れだよ。たぶん'];
+const phraseOld = 'いいかい？私はかわいい。ならそれだけでいいじゃないか、ね？';
+const phraseLike = 'ん？好きなもの？それはもちろんキミニキマッテルジャナイカー';
 
 const form = functions.config().liff.form;
 const map = functions.config().liff.map;
@@ -66,7 +69,9 @@ async function handleEvent(event) {
       return client.replyMessage(event.replyToken, [replyText1, replyText2, replyText3]);
     
     case 'text':
-      replyText1.text = arr[ Math.floor( Math.random() * arr.length )];
+      if (event.message.text.includes('歳') || event.message.text.includes('才')) replyText1.text = phraseOld;
+      else if (event.message.text.includes('好きなもの')) replyText1.text = phraseLike;
+      else replyText1.text = phraseDef[ Math.floor( Math.random() * phraseDef.length ) ];
       const tweet = event.message.text.split(':');
       if (tweet.length === 2) {
         const tweetData = {
