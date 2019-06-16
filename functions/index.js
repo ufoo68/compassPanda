@@ -81,7 +81,7 @@ async function handleEvent(event) {
         replyText1.text = `タイムスタンプ「${tweet[0]}」で呟いたよ`;
       }
       switch (event.message.text) {
-        case 'map':
+        case '地図':
           replyText1.text = `地図が見たいの？はいどうぞ`;
           replyText2.text = map;
           return client.replyMessage(event.replyToken, [replyText1, replyText2]);
