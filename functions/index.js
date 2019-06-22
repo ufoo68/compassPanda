@@ -58,14 +58,15 @@ async function handleEvent(event) {
   // switch of messages
   switch (event.message.type) {
     case 'location':
-      const locateData = {
+      let locateData = {};
+      locateData[event.timestamp] = {
         latitude: event.message.latitude,
         longitude:  event.message.longitude
       };
       replyText1.text = 'その場所ならこれかな？'
       replyText2.text = `${event.timestamp}`;
       replyText3.text = `上の番号といっしょに ${form} で呟いてみて`
-      db.collection('locateTweet').doc(`${event.timestamp}`).set(locateData);
+      db.collection('locateTweet').doc(`data`).set(locateData, { merge: true });
       return client.replyMessage(event.replyToken, [replyText1, replyText2, replyText3]);
     
     case 'text':
@@ -74,10 +75,11 @@ async function handleEvent(event) {
       else replyText1.text = phraseDef[ Math.floor( Math.random() * phraseDef.length ) ];
       const tweet = event.message.text.split(':');
       if (tweet.length === 2) {
-        const tweetData = {
+        let tweetData = {};
+        tweetData[tweet[0]] = {
           tweet: tweet[1]
         };
-        db.collection('locateTweet').doc(tweet[0]).set(tweetData, { merge: true });
+        db.collection('locateTweet').doc(`data`).set(tweetData, { merge: true });
         replyText1.text = `タイムスタンプ「${tweet[0]}」で呟いたよ`;
       }
       switch (event.message.text) {
