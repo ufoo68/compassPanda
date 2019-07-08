@@ -1,16 +1,19 @@
 {
-    "hosting": {
-        "public": "./",
-        "rewrites": [{
-            "source": "/webhook",
-            "function": "app"
-        }],
-        "ignore": [
-            "firebase.json",
-            "**/.*",
-            "**/node_modules/**"
-        ],
-        "engines": {"node": "8"}
+  "hosting": {
+    "public": "./",
+    "rewrites": [
+      {
+        "source": "/webhook",
+        "function": "app"
+      }
+    ],
+    "ignore": [
+      "firebase.json",
+      "**/.*",
+      "**/node_modules/**"
+    ],
+    "engines": {
+      "node": "8"
     }
-    
-}  
+  }
+}
