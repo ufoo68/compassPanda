@@ -51,5 +51,6 @@
 また、**ある特定の言葉**が含まれたメッセージをおくるとレアな返事を返してくれるときも...?
 
 # 技術的なお話
+
 LINE Botの開発にはLINE株式会社が提供する[Messaging API](https://developers.line.biz/ja/services/messaging-api/)と[line-bot-sdk-nodejs](https://github.com/line/line-bot-sdk-nodejs)を使いました。また、LINEのトーク画面上に現れる**フォーム画面**と**地図**は[LIFF](https://developers.line.biz/ja/docs/liff/overview/)という仕組みが用いられています。フォーム画面のソースコードは[ここ](https://github.com/ufoo68/compassPandaForm)に、地図表示のソースコードは[ここ](https://github.com/ufoo68/compass-panda-leaflet)に保管されています。  
-詳しい解説は[ここの記事]()で解説しています（準備中）。
+詳しい解説は[ここの記事](https://qiita.com/ufoo68/items/e6dba6eceaacbddf515f)で解説しています（準備中）。
