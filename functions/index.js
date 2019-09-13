@@ -3,13 +3,7 @@
 const functions = require('firebase-functions');
 const express = require('express');
 const line = require('@line/bot-sdk');
-
-const phraseBegin = ['友達登録ありがとう。', '私は今あなたがいる場所に呟きを残すことができるよ。', 'むふふ、すごいでしょ～。'];
-const phraseDef = [ 'んー、お姉さん難しいことわかんないなー', '君は面白いことを言うね', 'いいんだよ？たまには褒めてくれても',
-              'いやー、君も飽きないね', 'どうやら楽しんでくれてるようで、お姉さんも嬉しいな', '安心してくれたまえよ君、明日は晴れだよ。たぶん'];
-const phraseOld = 'いいかい？私はかわいい。ならそれだけでいいじゃないか、ね？';
-const phraseLike = 'ん？好きなもの？それはもちろんキミニキマッテルジャナイカー';
-const phraseHotouse = ['どうすればいいか説明するよ。', 'つぶやきたいときは「つぶやきを残す」をタップしてフォームから記入してね。', '地図が見たいときは下のメニューから「地図を見る」をタップすると見れるよ。'];
+const phrase = require('./strings.json')
 
 const config = {
     channelSecret: functions.config().channel.secret,
@@ -39,9 +33,9 @@ async function handleEvent(event) {
   switch (event.type) {
     case 'follow':
         return client.replyMessage(event.replyToken, [
-          buildReplyText(phraseBegin[0]),
-          buildReplyText(phraseBegin[1]),
-          buildReplyText(phraseBegin[2])
+          buildReplyText(phrase.begin[0]),
+          buildReplyText(phrase.begin[1]),
+          buildReplyText(phrase.begin[2])
         ]);
   }
 
@@ -49,20 +43,20 @@ async function handleEvent(event) {
   switch (event.message.type) {
     case 'text':
       if (event.message.text.includes('歳') || event.message.text.includes('才')) {
-        return client.replyMessage(event.replyToken, buildReplyText(phraseOld));
+        return client.replyMessage(event.replyToken, buildReplyText(phrase.age));
       }
       else if (event.message.text.includes('好きなもの')) {
-        return client.replyMessage(event.replyToken, buildReplyText(phraseLike));
+        return client.replyMessage(event.replyToken, buildReplyText(phrase.like));
       }
       else if (event.message.text.includes('使い方')) {
         return client.replyMessage(event.replyToken, [
-          buildReplyText(phraseHotouse[0]),
-          buildReplyText(phraseHotouse[1]),
-          buildReplyText(phraseHotouse[2])
+          buildReplyText(phrase.howToUse[0]),
+          buildReplyText(phrase.howToUse[1]),
+          buildReplyText(phrase.howToUse[2])
         ]);
       }
       else {
-        return client.replyMessage(event.replyToken, buildReplyText(phraseDef[ Math.floor( Math.random() * phraseDef.length )]));
+        return client.replyMessage(event.replyToken, buildReplyText(phrase.default[ Math.floor( Math.random() * phrase.default.length )]));
       }
     default:
       return Promise.resolve(null);
