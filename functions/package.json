@@ -9,10 +9,11 @@
     "logs": "firebase functions:log"
   },
   "dependencies": {
-    "@line/bot-sdk": "^6.7.0",
+    "@line/bot-sdk": "^6.8.2",
     "express": "^4.16.4",
     "firebase-admin": "~7.0.0",
-    "firebase-functions": "^3.0.1"
+    "firebase-functions": "^3.0.1",
+    "line-message-builder": "^1.0.2"
   },
   "private": true,
   "engines": {
