@@ -26,7 +26,13 @@ async function handleEvent(event) {
   // switch of follow
   switch (event.type) {
     case 'follow':
-        return client.replyMessage(event.replyToken, message.buildReplyText(phrase.begin));
+      return client.replyMessage(event.replyToken, message.buildReplyText(phrase.begin));
+    case 'things':
+      const thingsData = event.things.result;
+      const blePayload = thingsData.bleNotificationPayload;
+      const buffer = new Buffer.from(blePayload, 'base64');
+      const data = buffer.toString('ascii');
+      return client.replyMessage(event.replyToken, message.buildReplyText(`${data}${phrase.steps}`));
   }
 
   // switch of messages
