@@ -67,4 +67,4 @@ node_modules/
 .firebaserc
 
 ignore
-./vscode
+./.vscode
